@@ -1,33 +1,25 @@
-name: Compute Table Sums with Playwright
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:   # lets you run it manually
+name: Scrape Table Sums
+on: [push]
 
 jobs:
-  calculate-sum:
+  scrape:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
+      - uses: actions/checkout@v4
+      
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-
-      - name: Install dependencies
+          node-version: 20
+      
+      - name: Verify 22f3002107@ds.study.iitm.ac.in setup  # Your required email step
         run: |
-          npm ci
-
-      - name: Install Playwright
-        uses: microsoft/playwright-github-action@v1
-        with:
-          browsers: chromium
-
-      - name: Run Playwright script (22f3002107@ds.study.iitm.ac.in)
-        run: |
-          node sum-tables.js
+          npm init -y
+          npm install playwright
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      
+      - name: Run scraping script
+        run: node scrape.js
